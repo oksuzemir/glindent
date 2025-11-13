@@ -1,0 +1,10 @@
+export default function Loading() {
+  return (
+    <div className="flex h-screen w-screen items-center justify-center bg-background">
+      <div className="flex flex-col items-center gap-4">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-foreground/20 border-t-foreground" />
+        <p className="animate-pulse font-mono text-sm text-foreground/60">Loading Glindent...</p>
+      </div>
+    </div>
+  )
+}

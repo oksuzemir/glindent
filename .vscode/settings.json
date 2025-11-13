@@ -1,0 +1,20 @@
+{
+  "markdown.validate.enabled": false,
+  "markdown.validate.fileLinks.enabled": "ignore",
+  "markdown.validate.referenceLinks.enabled": "ignore",
+  "markdown.validate.fragmentLinks.enabled": "ignore",
+  "markdown.validate.ignoredLinks": [
+    "#*"
+  ],
+  "[markdown]": {
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "strings": "off",
+      "other": "off"
+    }
+  },
+  "files.associations": {
+    "*.md": "markdown"
+  }
+}
