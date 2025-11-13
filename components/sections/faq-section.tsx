@@ -35,23 +35,25 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
 
   return (
-    <section ref={ref} className="flex min-h-screen w-screen shrink-0 flex-col justify-center px-6 py-24 md:px-12">
-      <div className="mx-auto w-full max-w-5xl">
+    <section ref={ref} className="flex min-h-screen w-screen shrink-0 flex-col px-6 pt-32 pb-8 md:px-12 md:pt-40 md:pb-12 lg:px-16"
+    >
+      <div className="h-full flex flex-col">
         <h2
-          className={`mb-16 font-sans text-5xl font-light leading-tight tracking-tight text-foreground transition-all duration-1000 md:text-6xl lg:text-7xl ${
+          className={`mb-8 shrink-0 md:mb-12 font-sans text-4xl font-light leading-none tracking-tight text-foreground whitespace-nowrap transition-all duration-1000 md:text-5xl lg:text-6xl ${
             isVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-8 opacity-0 blur-sm"
           }`}
         >
           FAQ
         </h2>
 
-        <div className="space-y-8">
+        <div className="flex-1 overflow-y-auto pr-2" style={{ scrollbarWidth: "thin" }}>
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className={`group transition-all duration-700 delay-${index * 100} ${
+              className={`group transition-all duration-700 ${
                 isVisible ? "translate-y-0 opacity-100 blur-0" : "translate-y-8 opacity-0 blur-sm"
               }`}
+              style={{ transitionDelay: `${index * 100}ms` }}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}

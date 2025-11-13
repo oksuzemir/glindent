@@ -35,76 +35,79 @@ export function ContactSection() {
   return (
     <section
       ref={ref}
-      className="relative z-20 flex h-screen w-screen shrink-0 snap-start items-center px-4 pt-20 md:px-12 md:pt-0 lg:px-16"
+      className="relative z-20 flex min-h-screen w-screen shrink-0 snap-start flex-col px-6 pt-32 pb-8 md:px-12 md:pt-40 md:pb-12 lg:px-16"
     >
-      <div className="mx-auto w-full max-w-7xl">
-        <div className="grid gap-8 md:grid-cols-[1.2fr_1fr] md:gap-16 lg:gap-24">
-          <div className="flex flex-col justify-center">
-            <div
-              className={`relative z-20 mb-6 transition-all duration-700 md:mb-12 ${
-                isVisible ? "translate-x-0 opacity-100" : "-translate-x-12 opacity-0"
-              }`}
-            >
-              <h2 className="mb-2 font-sans text-4xl font-light leading-[1.05] tracking-tight text-foreground md:mb-3 md:text-7xl lg:text-8xl">
-                Let's
-                <br />
-                talk
-              </h2>
-              <p className="font-mono text-xs text-foreground/60 md:text-base">/ Get in touch</p>
-            </div>
+      <div className="h-full flex flex-col">
+        {/* Title */}
+        <div
+          className={`mb-8 shrink-0 md:mb-12 transition-all duration-700 ${
+            isVisible ? "translate-x-0 opacity-100" : "-translate-x-12 opacity-0"
+          }`}
+        >
+          <h2 className="font-sans text-5xl font-light leading-none tracking-tight text-foreground whitespace-nowrap md:text-6xl lg:text-7xl">
+            Let's talk
+          </h2>
+          <p className="mt-2 font-mono text-xs text-foreground/60 md:text-sm">/ Get in touch</p>
+        </div>
 
-            <div className="space-y-4 md:space-y-8">
+        {/* Scrollable Content Area */}
+        <div className="flex-1 overflow-y-auto pr-2" style={{ scrollbarWidth: "thin" }}>
+          <div className="flex flex-col md:flex-row md:justify-between gap-8 md:gap-12 lg:gap-20 xl:gap-24">
+            {/* Left side - Contact Info */}
+            <div className="flex flex-col gap-6 md:gap-8 md:w-[42%]">
               <a
                 href="mailto:info@glindent.co.uk"
-                className={`group block transition-all duration-700 ${
+                className={`flex flex-col group transition-all duration-700 ${
                   isVisible ? "translate-x-0 opacity-100" : "-translate-x-16 opacity-0"
                 }`}
-                style={{ transitionDelay: "200ms" }}
+                style={{ transitionDelay: "100ms" }}
               >
-                <div className="mb-1 flex items-center gap-2">
-                  <Mail className="h-3 w-3 text-foreground/60" />
-                  <span className="font-mono text-xs text-foreground/60">Email</span>
+                <div className="mb-2 flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-foreground/60" />
+                  <span className="font-mono text-xs text-foreground/60 uppercase tracking-wider">Email</span>
                 </div>
-                <p className="text-base text-foreground transition-colors group-hover:text-foreground/70 md:text-2xl">
+                <p className="text-lg text-foreground transition-all group-hover:text-foreground/70 group-hover:translate-x-1 md:text-xl lg:text-2xl">
                   info@glindent.co.uk
                 </p>
               </a>
 
               <div
-                className={`transition-all duration-700 ${
+                className={`flex flex-col transition-all duration-700 ${
                   isVisible ? "translate-x-0 opacity-100" : "-translate-x-16 opacity-0"
                 }`}
-                style={{ transitionDelay: "275ms" }}
+                style={{ transitionDelay: "200ms" }}
               >
-                <div className="mb-1 flex items-center gap-2">
-                  <Phone className="h-3 w-3 text-foreground/60" />
-                  <span className="font-mono text-xs text-foreground/60">Phone</span>
+                <div className="mb-2 flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-foreground/60" />
+                  <span className="font-mono text-xs text-foreground/60 uppercase tracking-wider">Phone</span>
                 </div>
-                <a
-                  href="tel:01202402675"
-                  className="block text-base text-foreground transition-colors hover:text-foreground/70 md:text-2xl"
-                >
-                  01202 402675
-                </a>
-                <a
-                  href="tel:07717886717"
-                  className="block text-base text-foreground transition-colors hover:text-foreground/70 md:text-2xl"
-                >
-                  07717 886717
-                </a>
+                <div className="flex flex-col gap-1">
+                  <a
+                    href="tel:01202402675"
+                    className="text-lg text-foreground transition-all hover:text-foreground/70 hover:translate-x-1 md:text-xl lg:text-2xl"
+                  >
+                    01202 402675
+                  </a>
+                  <a
+                    href="tel:07717886717"
+                    className="text-lg text-foreground transition-all hover:text-foreground/70 hover:translate-x-1 md:text-xl lg:text-2xl"
+                  >
+                    07717 886717
+                  </a>
+                </div>
               </div>
 
               <div
-                className={`transition-all duration-700 ${
+                className={`flex flex-col transition-all duration-700 ${
                   isVisible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
                 }`}
-                style={{ transitionDelay: "350ms" }}
+                style={{ transitionDelay: "300ms" }}
               >
-                <div className="mb-1 flex items-center gap-2">
-                  <MapPin className="h-3 w-3 text-foreground/60" />
-                  <span className="font-mono text-xs text-foreground/60">Address</span>
+                <div className="mb-2 flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-foreground/60" />
+                  <span className="font-mono text-xs text-foreground/60 uppercase tracking-wider">Address</span>
                 </div>
-                <p className="text-base text-foreground md:text-2xl">
+                <p className="text-lg leading-relaxed text-foreground md:text-xl lg:text-2xl">
                   Bourne House
                   <br />
                   23 Hinton Road
@@ -116,97 +119,106 @@ export function ContactSection() {
               </div>
 
               <div
-                className={`flex gap-2 pt-2 transition-all duration-700 md:pt-4 ${
+                className={`flex flex-wrap gap-4 pt-4 transition-all duration-700 md:pt-6 ${
                   isVisible ? "translate-x-0 opacity-100" : "-translate-x-8 opacity-0"
                 }`}
-                style={{ transitionDelay: "500ms" }}
+                style={{ transitionDelay: "400ms" }}
               >
-                {["Twitter", "Instagram", "LinkedIn", "Dribbble"].map((social, i) => (
+                {["Twitter", "Instagram", "LinkedIn", "Dribbble"].map((social) => (
                   <a
                     key={social}
                     href="#"
-                    className="border-b border-transparent font-mono text-xs text-foreground/60 transition-all hover:border-foreground/60 hover:text-foreground/90"
+                    className="group relative font-mono text-xs text-foreground/60 uppercase tracking-wider transition-all hover:text-foreground"
                   >
                     {social}
+                    <span className="absolute -bottom-1 left-0 h-px w-0 bg-foreground transition-all duration-300 group-hover:w-full" />
                   </a>
                 ))}
               </div>
             </div>
-          </div>
 
-          {/* Right side - Minimal form */}
-          <div className="flex flex-col justify-center">
-            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-              <div
-                className={`transition-all duration-700 ${
-                  isVisible ? "translate-x-0 opacity-100" : "translate-x-16 opacity-0"
-                }`}
-                style={{ transitionDelay: "200ms" }}
-              >
-                <label className="mb-1 block font-mono text-xs text-foreground/60 md:mb-2">Name</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  className="w-full border-b border-foreground/30 bg-transparent py-1.5 text-sm text-foreground placeholder:text-foreground/40 focus:border-foreground/50 focus:outline-none md:py-2 md:text-base"
-                  placeholder="Your name"
-                />
-              </div>
-
-              <div
-                className={`transition-all duration-700 ${
-                  isVisible ? "translate-x-0 opacity-100" : "translate-x-16 opacity-0"
-                }`}
-                style={{ transitionDelay: "350ms" }}
-              >
-                <label className="mb-1 block font-mono text-xs text-foreground/60 md:mb-2">Email</label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                  className="w-full border-b border-foreground/30 bg-transparent py-1.5 text-sm text-foreground placeholder:text-foreground/40 focus:border-foreground/50 focus:outline-none md:py-2 md:text-base"
-                  placeholder="your@email.com"
-                />
-              </div>
-
-              <div
-                className={`transition-all duration-700 ${
-                  isVisible ? "translate-x-0 opacity-100" : "translate-x-16 opacity-0"
-                }`}
-                style={{ transitionDelay: "500ms" }}
-              >
-                <label className="mb-1 block font-mono text-xs text-foreground/60 md:mb-2">Message</label>
-                <textarea
-                  rows={3}
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  required
-                  className="w-full border-b border-foreground/30 bg-transparent py-1.5 text-sm text-foreground placeholder:text-foreground/40 focus:border-foreground/50 focus:outline-none md:py-2 md:text-base"
-                  placeholder="Tell us about your project..."
-                />
-              </div>
-
-              <div
-                className={`transition-all duration-700 ${
-                  isVisible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
-                }`}
-                style={{ transitionDelay: "650ms" }}
-              >
-                <MagneticButton
-                  variant="primary"
-                  size="lg"
-                  className="w-full disabled:opacity-50"
-                  onClick={isSubmitting ? undefined : undefined}
+            {/* Right side - Contact Form */}
+            <div className="md:w-[52%]">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div
+                  className={`transition-all duration-700 ${
+                    isVisible ? "translate-x-0 opacity-100" : "translate-x-16 opacity-0"
+                  }`}
+                  style={{ transitionDelay: "200ms" }}
                 >
-                  {isSubmitting ? "Sending..." : "Send Message"}
-                </MagneticButton>
-                {submitSuccess && (
-                  <p className="mt-3 text-center font-mono text-sm text-foreground/80">Message sent successfully!</p>
-                )}
-              </div>
-            </form>
+                  <label className="mb-2 block font-mono text-xs text-foreground/60 uppercase tracking-wider">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                    className="w-full border-b-2 border-foreground/20 bg-transparent py-3 text-base text-foreground placeholder:text-foreground/30 transition-all focus:border-foreground focus:outline-none md:text-lg"
+                    placeholder="Your name"
+                  />
+                </div>
+
+                <div
+                  className={`transition-all duration-700 ${
+                    isVisible ? "translate-x-0 opacity-100" : "translate-x-16 opacity-0"
+                  }`}
+                  style={{ transitionDelay: "300ms" }}
+                >
+                  <label className="mb-2 block font-mono text-xs text-foreground/60 uppercase tracking-wider">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    className="w-full border-b-2 border-foreground/20 bg-transparent py-3 text-base text-foreground placeholder:text-foreground/30 transition-all focus:border-foreground focus:outline-none md:text-lg"
+                    placeholder="your@email.com"
+                  />
+                </div>
+
+                <div
+                  className={`transition-all duration-700 ${
+                    isVisible ? "translate-x-0 opacity-100" : "translate-x-16 opacity-0"
+                  }`}
+                  style={{ transitionDelay: "400ms" }}
+                >
+                  <label className="mb-2 block font-mono text-xs text-foreground/60 uppercase tracking-wider">
+                    Message
+                  </label>
+                  <textarea
+                    rows={5}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    required
+                    className="w-full resize-none border-b-2 border-foreground/20 bg-transparent py-3 text-base text-foreground placeholder:text-foreground/30 transition-all focus:border-foreground focus:outline-none md:text-lg"
+                    placeholder="Tell us about your project..."
+                  />
+                </div>
+
+                <div
+                  className={`transition-all duration-700 ${
+                    isVisible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+                  }`}
+                  style={{ transitionDelay: "500ms" }}
+                >
+                  <MagneticButton
+                    variant="primary"
+                    size="lg"
+                    className="w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                  </MagneticButton>
+                  {submitSuccess && (
+                    <p className="mt-4 text-center font-mono text-sm text-foreground animate-in fade-in slide-in-from-bottom-2 duration-500">
+                      ✓ Message sent successfully!
+                    </p>
+                  )}
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>

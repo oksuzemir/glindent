@@ -29,7 +29,8 @@ export function MagneticButton({
     const x = e.clientX - rect.left - rect.width / 2
     const y = e.clientY - rect.top - rect.height / 2
 
-    positionRef.current = { x: x * 0.15, y: y * 0.15 }
+    // Reduced multiplier from 0.15 to 0.08 to prevent overflow
+    positionRef.current = { x: x * 0.08, y: y * 0.08 }
 
     if (rafRef.current) cancelAnimationFrame(rafRef.current)
     rafRef.current = requestAnimationFrame(() => {

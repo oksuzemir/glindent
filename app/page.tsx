@@ -12,6 +12,7 @@ import Link from "next/link"
 import { FAQSection } from "@/components/sections/faq-section"
 import { GlindentLogo } from "@/components/glindent-logo"
 import { ChevronDown } from "lucide-react"
+import { motion, useMotionValue, useSpring, animate } from "framer-motion"
 
 // Dynamically import shader components with SSR disabled for better performance
 const Shader = dynamic(() => import("shaders/react").then(mod => mod.Shader), { 
@@ -26,10 +27,19 @@ export default function Home() {
   const [currentSection, setCurrentSection] = useState(0)
   const [isLoaded, setIsLoaded] = useState(false)
   const [shaderError, setShaderError] = useState(false)
-  const touchStartY = useRef(0)
-  const touchStartX = useRef(0)
   const shaderContainerRef = useRef<HTMLDivElement>(null)
-  const scrollThrottleRef = useRef<number | undefined>(undefined)
+  
+  // Framer Motion values for smooth animations
+  const x = useMotionValue(0)
+  const springX = useSpring(x, { 
+    stiffness: 300, 
+    damping: 30,
+    mass: 0.8 
+  })
+  
+  const isAnimating = useRef(false)
+  const touchStartX = useRef(0)
+  const touchStartY = useRef(0)
 
   useEffect(() => {
     const checkShaderReady = () => {
@@ -66,38 +76,42 @@ export default function Home() {
   }, [])
 
   const scrollToSection = (index: number) => {
-    if (scrollContainerRef.current) {
-      const sectionWidth = scrollContainerRef.current.offsetWidth
-      scrollContainerRef.current.scrollTo({
-        left: sectionWidth * index,
-        behavior: "smooth",
-      })
-      setCurrentSection(index)
-    }
+    if (index < 0 || index > 4 || isAnimating.current) return
+    
+    isAnimating.current = true
+    setCurrentSection(index)
+    
+    const targetX = -index * (typeof window !== 'undefined' ? window.innerWidth : 0)
+    
+    animate(x, targetX, {
+      type: "spring",
+      stiffness: 300,
+      damping: 30,
+      mass: 0.8,
+      onComplete: () => {
+        isAnimating.current = false
+      }
+    })
   }
 
+  // Touch gesture navigation
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
-      touchStartY.current = e.touches[0].clientY
       touchStartX.current = e.touches[0].clientX
-    }
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (Math.abs(e.touches[0].clientY - touchStartY.current) > 10) {
-        e.preventDefault()
-      }
+      touchStartY.current = e.touches[0].clientY
     }
 
     const handleTouchEnd = (e: TouchEvent) => {
-      const touchEndY = e.changedTouches[0].clientY
       const touchEndX = e.changedTouches[0].clientX
-      const deltaY = touchStartY.current - touchEndY
+      const touchEndY = e.changedTouches[0].clientY
       const deltaX = touchStartX.current - touchEndX
+      const deltaY = touchStartY.current - touchEndY
 
-      if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 50) {
-        if (deltaY > 0 && currentSection < 4) {
+      // Horizontal swipe detected
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+        if (deltaX > 0 && currentSection < 4) {
           scrollToSection(currentSection + 1)
-        } else if (deltaY < 0 && currentSection > 0) {
+        } else if (deltaX < 0 && currentSection > 0) {
           scrollToSection(currentSection - 1)
         }
       }
@@ -106,39 +120,48 @@ export default function Home() {
     const container = scrollContainerRef.current
     if (container) {
       container.addEventListener("touchstart", handleTouchStart, { passive: true })
-      container.addEventListener("touchmove", handleTouchMove, { passive: false })
       container.addEventListener("touchend", handleTouchEnd, { passive: true })
     }
 
     return () => {
       if (container) {
         container.removeEventListener("touchstart", handleTouchStart)
-        container.removeEventListener("touchmove", handleTouchMove)
         container.removeEventListener("touchend", handleTouchEnd)
       }
     }
   }, [currentSection])
 
+  // Wheel navigation with smooth transitions
   useEffect(() => {
+    let wheelTimeout: NodeJS.Timeout | null = null
+    let accumulatedDelta = 0
+
     const handleWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        e.preventDefault()
+      e.preventDefault()
+      
+      // Ignore wheel events during animation
+      if (isAnimating.current) return
 
-        if (!scrollContainerRef.current) return
+      // Accumulate scroll delta
+      accumulatedDelta += e.deltaY
 
-        scrollContainerRef.current.scrollBy({
-          left: e.deltaY,
-          behavior: "instant",
-        })
-
-        const sectionWidth = scrollContainerRef.current.offsetWidth
-        const scrollLeft = scrollContainerRef.current.scrollLeft
-        const newSection = Math.round(scrollLeft / sectionWidth)
-
-        if (newSection !== currentSection && newSection >= 0 && newSection <= 4) {
-          setCurrentSection(newSection)
-        }
+      // Clear existing timeout
+      if (wheelTimeout) {
+        clearTimeout(wheelTimeout)
       }
+
+      // After user stops scrolling for 150ms, decide direction
+      wheelTimeout = setTimeout(() => {
+        const threshold = 50
+
+        if (accumulatedDelta > threshold && currentSection < 4) {
+          scrollToSection(currentSection + 1)
+        } else if (accumulatedDelta < -threshold && currentSection > 0) {
+          scrollToSection(currentSection - 1)
+        }
+
+        accumulatedDelta = 0
+      }, 150)
     }
 
     const container = scrollContainerRef.current
@@ -150,44 +173,38 @@ export default function Home() {
       if (container) {
         container.removeEventListener("wheel", handleWheel)
       }
+      if (wheelTimeout) {
+        clearTimeout(wheelTimeout)
+      }
     }
   }, [currentSection])
 
+  // Keyboard navigation
   useEffect(() => {
-    const handleScroll = () => {
-      if (scrollThrottleRef.current) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isAnimating.current) return
 
-      scrollThrottleRef.current = requestAnimationFrame(() => {
-        if (!scrollContainerRef.current) {
-          scrollThrottleRef.current = undefined
-          return
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault()
+        if (currentSection < 4) {
+          scrollToSection(currentSection + 1)
         }
-
-        const sectionWidth = scrollContainerRef.current.offsetWidth
-        const scrollLeft = scrollContainerRef.current.scrollLeft
-        const newSection = Math.round(scrollLeft / sectionWidth)
-
-        if (newSection !== currentSection && newSection >= 0 && newSection <= 4) {
-          setCurrentSection(newSection)
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault()
+        if (currentSection > 0) {
+          scrollToSection(currentSection - 1)
         }
-
-        scrollThrottleRef.current = undefined
-      })
-    }
-
-    const container = scrollContainerRef.current
-    if (container) {
-      container.addEventListener("scroll", handleScroll, { passive: true })
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener("scroll", handleScroll)
-      }
-      if (scrollThrottleRef.current) {
-        cancelAnimationFrame(scrollThrottleRef.current)
+      } else if (e.key === "Home") {
+        e.preventDefault()
+        scrollToSection(0)
+      } else if (e.key === "End") {
+        e.preventDefault()
+        scrollToSection(4)
       }
     }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
   }, [currentSection])
 
   return (
@@ -239,7 +256,7 @@ export default function Home() {
       )}
 
       <nav
-        className={`fixed left-0 right-0 top-0 z-40 flex items-center justify-between px-6 py-6 transition-opacity duration-700 md:px-12 ${
+        className={`fixed left-0 right-0 top-0 z-40 flex items-center justify-between px-6 py-6 transition-opacity duration-700 backdrop-blur-md bg-black/5 md:px-12 ${
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -277,15 +294,16 @@ export default function Home() {
         </button>
       </nav>
 
-      <div
+      <motion.div
         ref={scrollContainerRef}
-        data-scroll-container
-        className={`relative z-10 flex h-screen overflow-x-auto overflow-y-hidden transition-opacity duration-700 ${
+        style={{ x: springX }}
+        className={`relative z-10 flex h-screen transition-opacity duration-700 ${
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        <section className="relative flex min-h-screen w-screen shrink-0 flex-col justify-end px-6 pb-16 pt-24 md:px-12 md:pb-24">
+        <section 
+          className="relative flex min-h-screen w-screen shrink-0 flex-col px-6 pt-32 pb-8 md:px-12 md:pt-40 md:pb-12 lg:px-16"
+        >
           <div
             className="absolute inset-0 z-0"
             style={{
@@ -293,53 +311,55 @@ export default function Home() {
             }}
           />
 
-          <div className="relative z-10 mt-6 max-w-3xl md:mt-8">
-            <div className="glass mb-6 inline-block animate-in fade-in slide-in-from-bottom-4 rounded-2xl px-4 py-1.5 duration-700">
-              <p className="text-[14px] leading-none text-white">High-Quality Dental Supplies</p>
-            </div>
-            <h1 className="mb-6 animate-in fade-in slide-in-from-bottom-8 font-sans text-6xl font-light leading-[1.1] tracking-tight text-white duration-1000 md:text-7xl lg:text-8xl">
-              <span className="text-balance">
-                Where quality
-                <br />
-                meets care
-              </span>
-            </h1>
-            <p className="mb-8 max-w-xl animate-in fade-in slide-in-from-bottom-4 text-lg leading-relaxed text-white/95 duration-1000 delay-200 md:text-xl">
-              <span className="text-pretty">
-                We believe dental professionals deserve materials they can trust. That's why Glindent delivers
-                world-class products, supported by responsive service and a commitment to helping you achieve the best
-                results for your patients.
-              </span>
-            </p>
+          <div className="relative z-10 flex h-full flex-col justify-start">
+            <div className="max-w-3xl pt-4 md:pt-8">
+              <div className="glass mb-6 inline-block animate-in fade-in slide-in-from-bottom-4 rounded-2xl px-4 py-1.5 duration-700">
+                <p className="text-[14px] leading-none text-white">High-Quality Dental Supplies</p>
+              </div>
+              <h1 className="mb-6 animate-in fade-in slide-in-from-bottom-8 font-sans text-5xl font-light leading-[1.1] tracking-tight text-white duration-1000 md:text-6xl lg:text-7xl xl:text-8xl">
+                <span className="text-balance">
+                  Where quality
+                  <br />
+                  meets care
+                </span>
+              </h1>
+              <p className="mb-8 max-w-xl animate-in fade-in slide-in-from-bottom-4 text-base leading-relaxed text-white/95 duration-1000 delay-200 md:text-lg lg:text-xl">
+                <span className="text-pretty">
+                  We believe dental professionals deserve materials they can trust. That's why Glindent delivers
+                  world-class products, supported by responsive service and a commitment to helping you achieve the best
+                  results for your patients.
+                </span>
+              </p>
 
-            <div className="flex animate-in fade-in slide-in-from-bottom-4 flex-col gap-4 duration-1000 delay-300 sm:flex-row sm:items-center">
-              <Link href="/products">
-                <MagneticButton size="lg" variant="primary">
-                  Shop Now
+              <div className="flex animate-in fade-in slide-in-from-bottom-4 flex-col gap-4 duration-1000 delay-300 sm:flex-row sm:items-center">
+                <Link href="/products">
+                  <MagneticButton size="lg" variant="primary">
+                    Shop Now
+                  </MagneticButton>
+                </Link>
+                <MagneticButton size="lg" variant="secondary" onClick={() => scrollToSection(4)}>
+                  Contact Us
                 </MagneticButton>
-              </Link>
-              <MagneticButton size="lg" variant="secondary" onClick={() => scrollToSection(4)}>
-                Contact Us
-              </MagneticButton>
+              </div>
             </div>
-          </div>
 
-          <button
-            onClick={() => scrollToSection(1)}
-            className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 animate-in fade-in flex-col items-center gap-2 transition-transform duration-1000 delay-500 hover:scale-105"
-          >
-            <p className="text-[13px] font-medium text-white/90">Scroll to explore</p>
-            <div className="animate-bounce">
-              <ChevronDown className="h-5 w-5 text-white/90" strokeWidth={2} />
-            </div>
-          </button>
+            <button
+              onClick={() => scrollToSection(1)}
+              className="mt-auto mb-8 flex flex-col items-center gap-2 transition-transform duration-1000 delay-500 hover:scale-105 animate-in fade-in"
+            >
+              <p className="text-[13px] font-medium text-white/90">Scroll to explore</p>
+              <div className="animate-bounce">
+                <ChevronDown className="h-5 w-5 text-white/90" strokeWidth={2} />
+              </div>
+            </button>
+          </div>
         </section>
 
         <AboutSection scrollToSection={scrollToSection} />
         <ProductsSection />
         <FAQSection />
         <ContactSection />
-      </div>
+      </motion.div>
 
       <style jsx global>{`
         div::-webkit-scrollbar {

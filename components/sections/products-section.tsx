@@ -19,21 +19,21 @@ export function ProductsSection() {
     <>
       <section
         ref={sectionRef}
-        className="relative flex min-h-screen w-screen shrink-0 flex-col justify-center px-6 py-16 md:px-12"
+        className="relative flex min-h-screen w-screen shrink-0 flex-col px-6 pt-32 pb-8 md:px-12 md:pt-40 md:pb-12 lg:px-16"
       >
-        <div className="mx-auto w-full max-w-7xl">
+        <div className="flex h-full w-full flex-col">
           <div
-            className={`mb-8 transition-all duration-1000 ${
+            className={`mb-8 shrink-0 md:mb-12 transition-all duration-1000 ${
               isRevealed ? "translate-y-0 opacity-100 blur-0" : "translate-y-8 opacity-0 blur-md"
             }`}
           >
-            <h2 className="mb-4 font-sans text-5xl font-light tracking-tight text-foreground md:text-6xl">Products</h2>
-            <p className="max-w-2xl text-lg leading-relaxed text-foreground/80">
+            <h2 className="font-sans text-4xl font-light tracking-tight text-foreground md:text-5xl lg:text-6xl">Products</h2>
+            <p className="mt-3 max-w-2xl text-base leading-relaxed text-foreground/80 md:text-lg">
               Explore our comprehensive range of premium dental supplies designed for excellence
             </p>
           </div>
 
-          <div className="max-h-[calc(100vh-280px)] overflow-y-auto pr-2" style={{ scrollbarWidth: "thin" }}>
+          <div className="flex-1 overflow-y-auto pr-2" style={{ scrollbarWidth: "thin" }}>
             <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {products.map((product, index) => (
                 <button

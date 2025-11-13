@@ -1,9 +1,9 @@
 # Copilot Instructions - Glindent Dental Supplies Website
 
-**Last Updated:** November 13, 2025  
+**Last Updated:** November 14, 2025  
 **Project Status:** ✅ Active Development  
 **Developer:** USER  
-**Location:** `c:\Users\USER\Desktop\code`
+**Location:** `c:\Users\USER\Documents\GitHub\glindent`
 
 ---
 
@@ -50,6 +50,7 @@ Glindent is the UK branch of Gülsa Medical Devices and Materials (Turkey-based,
 
 ### UI & Styling
 - **Tailwind CSS 4.1.9** - Utility-first CSS framework
+- **Framer Motion 11.15.0** - Animation library for smooth transitions
 - **shadcn/ui** - Component library (New York style)
 - **tw-animate-css 1.3.3** - Animation utilities
 - **Radix UI** - Headless accessible components
@@ -143,12 +144,25 @@ c:\Users\USER\Desktop\code/
 
 ## ✨ Key Features
 
-### 1. **Horizontal Scroll Navigation**
+### 1. **Framer Motion Horizontal Scroll Navigation**
 - **Location:** `app/page.tsx`
+- **Library:** Framer Motion with spring physics
 - **Sections:** Home → About → Products → FAQ → Contact
-- Custom scroll container with wheel/touch event handling
-- Smooth scroll-to-section functionality
-- Section indicator in navigation
+- **Implementation:**
+  - `motion.div` container with `x` transform animation
+  - Spring configuration: `stiffness: 300, damping: 30, mass: 0.8`
+  - `useMotionValue` and `useSpring` for smooth transitions
+  - Animation lock prevents conflicts during transitions
+- **Input Methods:**
+  - Mouse wheel with delta accumulation (150ms debounce)
+  - Keyboard navigation (Arrow keys, Home, End)
+  - Touch swipe gestures (horizontal detection)
+  - Header navigation clicks
+- **Features:**
+  - Smooth spring-based slide transitions between sections
+  - No teleporting or instant jumps
+  - Active section tracking with visual indicator
+  - All sections full-screen width with proper alignment
 
 ### 2. **WebGL Animated Background**
 - **Library:** `shaders/react`
@@ -167,8 +181,10 @@ c:\Users\USER\Desktop\code/
 - **Component:** `components/magnetic-button.tsx`
 - Variants: primary, secondary, ghost
 - Sizes: default, lg
-- Follows mouse within button bounds (15% strength)
+- Follows mouse within button bounds (8% strength - reduced from 15% to prevent overflow)
 - Smooth reset on mouse leave
+- RAF-based animation for performance
+- **Note:** Reduced magnetic multiplier to 0.08 to prevent horizontal scroll issues
 
 ### 5. **Scroll-Based Reveal Animations**
 - **Hook:** `hooks/use-reveal.ts`
@@ -192,12 +208,62 @@ c:\Users\USER\Desktop\code/
 - Image gallery (single image per product)
 
 ### 8. **Contact Form**
-- Name, email, message fields
-- Client-side validation
-- Simulated submission (1.5s delay)
-- Success state with auto-reset
+- **Location:** `components/sections/contact-section.tsx`
+- **Layout:** Two-column design with space-between justification
+  - Left: Contact info (42% width) - flex column structure
+    - Email, phone numbers, address with icons
+    - Social media links with underline hover animations
+  - Right: Contact form (52% width)
+    - Name, email, message fields with thick borders (border-b-2)
+    - Uppercase labels with tracking
+    - Large, prominent text sizes (lg-2xl)
+    - Full-width submit button with magnetic effect
+- **Features:**
+  - Client-side validation (required fields)
+  - Simulated submission (1.5s delay)
+  - Success state with checkmark and animation
+  - Hover animations on info links (translate-x-1)
+  - Responsive: stacks vertically on mobile
+- **Styling:**
+  - Consistent with homepage alignment (no centered container)
+  - Large gaps between sections (gap-20 xl:gap-24)
+  - Professional, clean design with proper spacing
 
 ### 9. **FAQ Accordion**
+- **Location:** `components/sections/faq-section.tsx`
+- **Max Width:** Updated to 7xl (from 5xl) to match other sections
+- Single-open accordion (controlled state)
+- 4 common questions about ordering, payment, shipping, returns
+- Smooth expand/collapse with inline transition delays
+- **Layout:** Full-width container without centering for consistent alignment
+
+### 10. **About Section with Scrollable Content**
+- **Location:** `components/sections/about-section.tsx`
+- **Layout:** Two-column with space-between (48% each column)
+  - Left: Company story with image and paragraphs
+  - Right: Stats display (40+ Years, 1000+ Products, Global Reach)
+- **Scrollable Content:**
+  - Content area with gradient overlay at bottom
+  - Gradient dynamically uses CSS `--background` variable
+  - 6-step smooth gradient (0% → 100% transparency)
+  - Gradient disappears when scrolled to bottom (scroll detection)
+  - Buttons always visible below scrollable area
+- **Features:**
+  - Staggered reveal animations
+  - Creative stat layout with hover effects
+  - Responsive: stacks vertically on mobile
+
+### 11. **Section Alignment System**
+- **All sections** now align consistently with homepage
+- **No centered containers** - content starts at same horizontal point as logo
+- **Padding structure:** `px-6 md:px-12 lg:px-16` (same as homepage)
+- **Two-column layouts** use `flex-row justify-between` with explicit widths
+- **Sections affected:**
+  - About: 48% width columns
+  - Products: Full width with grid
+  - FAQ: Full width (removed max-w-5xl)
+  - Contact: 42%/52% width split
+- **Result:** All content aligns with header logo position
 - 4 pre-defined questions
 - Smooth expand/collapse
 - Auto-open first item
@@ -1020,4 +1086,47 @@ pnpm add -D [dev-dependency]
 ---
 
 **End of Copilot Instructions**  
-*Keep this document updated as the project evolves. Last update: November 13, 2025*
+*Keep this document updated as the project evolves. Last update: November 14, 2025*
+
+---
+
+## 🔄 Recent Updates (November 14, 2025)
+
+### Major Changes
+1. **Framer Motion Integration**
+   - Replaced native browser smooth scroll with Framer Motion
+   - Implemented spring physics for natural, smooth transitions
+   - Added animation locking to prevent navigation conflicts
+   - Fixed all teleportation/jumping issues
+
+2. **Section Alignment Overhaul**
+   - Removed all centered `max-w-7xl` containers
+   - Implemented consistent padding across all sections
+   - Aligned all content with header logo position
+   - Two-column layouts now use `justify-between` with explicit widths
+
+3. **Contact Section Redesign**
+   - Two-column layout: Info (42%) + Form (52%)
+   - Larger text sizes and prominent styling
+   - Thick borders on inputs (border-b-2)
+   - Uppercase labels with tracking
+   - Improved spacing and gaps (gap-20 xl:gap-24)
+   - Info fields use flex column structure for consistency
+
+4. **About Section Enhancements**
+   - Added scrollable content area with gradient overlay
+   - Dynamic gradient using CSS `--background` variable
+   - Gradient disappears at scroll bottom
+   - Buttons always visible below scrollable area
+   - Two-column layout with 48% width each
+
+5. **Magnetic Button Optimization**
+   - Reduced magnetic strength from 0.15 to 0.08
+   - Prevents horizontal scroll overflow
+   - Maintains smooth magnetic effect without layout issues
+
+6. **Bug Fixes**
+   - Fixed FAQ section dynamic Tailwind class issues
+   - Resolved build errors with missing closing divs
+   - Fixed horizontal overflow issues throughout application
+   - Corrected gradient overlay implementation
