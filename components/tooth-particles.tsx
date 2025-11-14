@@ -28,17 +28,20 @@ export function ToothParticles({ currentSection }: ToothParticlesProps) {
     const container = containerRef.current
     if (!container) return
 
-    // Initialize particles
-    const particleCount = 50
+    // Initialize particles (slightly increased from minimal for a gentle presence)
+    const particleCount = 30
     particlesRef.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
-      size: Math.random() * 30 + 20,
+      // Gentle drift (a little faster than ultra-subtle)
+      vx: (Math.random() - 0.5) * 0.28,
+      vy: (Math.random() - 0.5) * 0.28,
+      // Slightly larger sizes for better visibility
+      size: Math.random() * 22 + 14,
       rotation: Math.random() * 360,
-      rotationSpeed: (Math.random() - 0.5) * 1,
-      opacity: Math.random() * 0.03 + 0.02
+      rotationSpeed: (Math.random() - 0.5) * 0.6,
+      // Low opacity but increased slightly for better visibility
+      opacity: Math.random() * 0.04 + 0.012
     }))
 
     // Create particle elements
@@ -92,28 +95,29 @@ export function ToothParticles({ currentSection }: ToothParticlesProps) {
     }
   }, [])
 
-  // React to section changes - push particles in scroll direction
+    // React to section changes - push particles in scroll direction (subtle)
   useEffect(() => {
     const direction = currentSection > prevSectionRef.current ? -1 : 1
     prevSectionRef.current = currentSection
 
     // Add temporary velocity boost to particles
     particlesRef.current.forEach((particle) => {
-      particle.vx += direction * (Math.random() * 2 + 1)
-      particle.vy += (Math.random() - 0.5) * 0.5
+      // slightly stronger nudge for a noticeable but still subtle effect
+      particle.vx += direction * (Math.random() * 0.8 + 0.3)
+      particle.vy += (Math.random() - 0.5) * 0.25
     })
 
     // Gradually slow down particles back to normal speed
     const slowdownInterval = setInterval(() => {
       particlesRef.current.forEach((particle) => {
-        particle.vx *= 0.95
-        if (Math.abs(particle.vx) < 0.5) {
-          particle.vx = (Math.random() - 0.5) * 0.5
+        particle.vx *= 0.9
+        if (Math.abs(particle.vx) < 0.2) {
+          particle.vx = (Math.random() - 0.5) * 0.25
         }
       })
-    }, 50)
+    }, 60)
 
-    setTimeout(() => clearInterval(slowdownInterval), 1000)
+    setTimeout(() => clearInterval(slowdownInterval), 900)
 
     return () => clearInterval(slowdownInterval)
   }, [currentSection])

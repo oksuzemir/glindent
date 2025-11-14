@@ -33,20 +33,20 @@ export function ProductsSection() {
             </p>
           </div>
 
-          <div className="flex-1 overflow-y-auto pr-2" style={{ scrollbarWidth: "thin" }}>
+          <div className="flex-1 overflow-y-auto pr-2" style={{ scrollbarWidth: "thin" }} onWheel={(e) => e.stopPropagation()}>
             <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {products.map((product, index) => (
                 <button
                   key={product.id}
                   onClick={() => handleProductClick(product)}
-                  className={`group relative block overflow-hidden rounded-xl border border-foreground/10 bg-foreground/5 backdrop-blur-sm transition-all duration-700 hover:border-foreground/20 hover:bg-foreground/10 ${
+                  className={`group relative flex flex-col overflow-hidden rounded-xl border border-foreground/10 bg-foreground/5 backdrop-blur-sm transition-all duration-700 hover:border-foreground/20 hover:bg-foreground/10 ${
                     isRevealed ? "translate-y-0 opacity-100 blur-0" : "translate-y-12 opacity-0 blur-md"
                   }`}
                   style={{
                     transitionDelay: `${index * 100}ms`,
                   }}
                 >
-                  <div className="relative aspect-4/3 overflow-hidden bg-foreground/5">
+                  <div className="relative aspect-square overflow-hidden bg-foreground/5">
                     <Image
                       src={product.image || "/placeholder.svg"}
                       alt={`${product.name} - ${product.description}`}
@@ -55,14 +55,14 @@ export function ProductsSection() {
                       className="object-cover transition-opacity duration-500 group-hover:opacity-80"
                     />
                   </div>
-                  <div className="p-4 text-left">
+                  <div className="flex flex-col flex-1 p-4 text-left">
                     <h3 className="mb-1 font-sans text-base font-medium text-foreground transition-colors group-hover:text-foreground">
                       {product.name}
                     </h3>
-                    <p className="mb-3 line-clamp-2 text-xs leading-relaxed text-foreground/70">
+                    <p className="mb-3 line-clamp-2 text-xs leading-relaxed text-foreground/70 flex-1">
                       {product.description}
                     </p>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mt-auto">
                       <span className="font-mono text-lg font-semibold text-foreground">{product.price}</span>
                       <span className="text-xs text-foreground/60 transition-all group-hover:text-foreground/90">
                         View →

@@ -2,8 +2,8 @@ export function GlindentLogo({
   className = "",
   variant = "white",
 }: { className?: string; variant?: "white" | "green" }) {
-  const textColor = variant === "white" ? "#ffffff" : "#007A72"
-  const taglineColor = variant === "white" ? "rgba(255,255,255,0.7)" : "#3ACCFF"
+  const textColor = variant === "white" ? "var(--foreground)" : "var(--primary-start)"
+  const taglineColor = variant === "white" ? "rgba(255,255,255,0.7)" : "var(--primary-end)"
 
   return (
     <svg
@@ -33,7 +33,6 @@ export function GlindentLogo({
         fontSize="8"
         fontWeight="400"
         letterSpacing="0.15em"
-        textTransform="uppercase"
       >
         WAY TO DENTISTRY
       </text>

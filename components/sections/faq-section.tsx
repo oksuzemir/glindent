@@ -57,18 +57,20 @@ export function FAQSection() {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="flex w-full items-start gap-6 border-b border-foreground/10 pb-8 text-left transition-all duration-300 hover:border-foreground/20"
+                className="flex w-full items-center gap-6 border-b border-foreground/10 py-8 text-left transition-all duration-300 hover:border-foreground/20"
               >
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center">
+                <div className="flex w-16 shrink-0 items-center justify-center">
                   <span className="font-sans text-5xl font-light text-foreground/40 transition-colors duration-300 group-hover:text-foreground/60">
                     {faq.number}
                   </span>
                 </div>
 
-                <div className="flex-1">
-                  <h3 className="mb-4 font-sans text-2xl font-medium text-foreground transition-colors duration-300 group-hover:text-foreground/80 md:text-3xl">
-                    {faq.question}
-                  </h3>
+                <div className="flex-1 flex flex-col justify-center">
+                  <div className="flex items-center">
+                    <h3 className="font-sans text-2xl font-medium text-foreground transition-colors duration-300 group-hover:text-foreground/80 md:text-3xl whitespace-nowrap truncate">
+                      {faq.question}
+                    </h3>
+                  </div>
 
                   <div
                     className={`overflow-hidden transition-all duration-500 ${
@@ -81,7 +83,7 @@ export function FAQSection() {
                   </div>
                 </div>
 
-                <div className="flex h-16 shrink-0 items-start justify-end">
+                <div className="flex shrink-0 items-center justify-end">
                   <div
                     className={`transition-transform duration-300 ${openIndex === index ? "rotate-45" : "rotate-0"}`}
                   >

@@ -9,6 +9,7 @@ import { ContactSection } from "@/components/sections/contact-section"
 import { MagneticButton } from "@/components/magnetic-button"
 import { useRef, useEffect, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { FAQSection } from "@/components/sections/faq-section"
 import { GlindentLogo } from "@/components/glindent-logo"
 import { ChevronDown } from "lucide-react"
@@ -43,8 +44,8 @@ export default function Home() {
   useEffect(() => {
     const unsubscribe = x.on('change', (latest) => {
       // Move gradient opposite to scroll direction for parallax effect
-      // Increased scale factor from 0.1 to 0.25 for faster color changes
-      gradientX.set(latest * 0.25)
+      // Increased scale factor for faster, more visible color changes
+      gradientX.set(latest * 0.5)
     })
 
     return () => unsubscribe()
@@ -193,9 +194,9 @@ export default function Home() {
         className="fixed inset-0 z-0"
         style={{
           x: springGradientX,
-          background: 'linear-gradient(315deg, #00A89A 0%, #3ACCFF 100%)',
-          width: '300%',
-          left: '-100%'
+          background: 'linear-gradient(315deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%)',
+          width: '500%',
+          left: '-200%'
         }}
       />
       <div className="fixed inset-0 z-0 bg-black/20" />
@@ -205,9 +206,10 @@ export default function Home() {
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
         style={{
-          background: 'rgba(0, 0, 0, 0.1)',
-          backdropFilter: 'blur(12px) saturate(120%)',
-          WebkitBackdropFilter: 'blur(12px) saturate(120%)',
+          background: 'transparent',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          borderBottom: '1px solid var(--header-border)'
         }}
       >
         <button
@@ -255,40 +257,63 @@ export default function Home() {
           className="relative flex min-h-screen w-screen shrink-0 flex-col px-6 pt-32 pb-8 md:px-12 md:pt-40 md:pb-12 lg:px-16"
         >
           <div className="relative z-10 flex h-full flex-col justify-start">
-            <div className="max-w-3xl pt-4 md:pt-8">
-              <div className="glass mb-6 inline-block animate-in fade-in slide-in-from-bottom-4 rounded-2xl px-4 py-1.5 duration-700">
-                <p className="text-[14px] leading-none text-white">High-Quality Dental Supplies</p>
-              </div>
-              <h1 className="mb-6 animate-in fade-in slide-in-from-bottom-8 font-sans text-5xl font-light leading-[1.1] tracking-tight text-white duration-1000 md:text-6xl lg:text-7xl xl:text-8xl">
-                <span className="text-balance">
-                  Where quality
-                  <br />
-                  meets care
-                </span>
-              </h1>
-              <p className="mb-8 max-w-xl animate-in fade-in slide-in-from-bottom-4 text-base leading-relaxed text-white/95 duration-1000 delay-200 md:text-lg lg:text-xl">
-                <span className="text-pretty">
-                  We believe dental professionals deserve materials they can trust. That's why Glindent delivers
-                  world-class products, supported by responsive service and a commitment to helping you achieve the best
-                  results for your patients.
-                </span>
-              </p>
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16 pt-4 md:pt-8 lg:items-start">
+              {/* Text Content */}
+              <div className="flex flex-col justify-start max-w-3xl">
+                <div className="glass mb-6 inline-block animate-in fade-in slide-in-from-bottom-4 rounded-2xl px-4 py-1.5 duration-700 w-fit">
+                  <p className="text-[14px] leading-none text-white">High-Quality Dental Supplies</p>
+                </div>
+                <h1 className="mb-6 animate-in fade-in slide-in-from-bottom-8 font-sans text-5xl font-light leading-[1.1] tracking-tight text-white duration-1000 md:text-6xl lg:text-7xl xl:text-8xl">
+                  <span className="text-balance">
+                    Where quality
+                    <br />
+                    meets care
+                  </span>
+                </h1>
+                <p className="mb-8 max-w-xl animate-in fade-in slide-in-from-bottom-4 text-base leading-relaxed text-white/95 duration-1000 delay-200 md:text-lg lg:text-xl">
+                  <span className="text-pretty">
+                    We believe dental professionals deserve materials they can trust. That's why Glindent delivers
+                    world-class products, supported by responsive service and a commitment to helping you achieve the best
+                    results for your patients.
+                  </span>
+                </p>
 
-              <div className="flex animate-in fade-in slide-in-from-bottom-4 flex-col gap-4 duration-1000 delay-300 sm:flex-row sm:items-center">
-                <Link href="/products">
-                  <MagneticButton size="lg" variant="primary">
-                    Shop Now
+                <div className="flex animate-in fade-in slide-in-from-bottom-4 flex-col gap-4 duration-1000 delay-300 sm:flex-row sm:items-center">
+                  <Link href="/products">
+                    <MagneticButton size="lg" variant="primary">
+                      Shop Now
+                    </MagneticButton>
+                  </Link>
+                  <MagneticButton size="lg" variant="secondary" onClick={() => scrollToSection(4)}>
+                    Contact Us
                   </MagneticButton>
-                </Link>
-                <MagneticButton size="lg" variant="secondary" onClick={() => scrollToSection(4)}>
-                  Contact Us
-                </MagneticButton>
+                </div>
+              </div>
+
+              {/* Image Area */}
+              <div className="relative hidden lg:block animate-in fade-in slide-in-from-right-8 duration-1000 delay-200 self-start">
+                <div className="relative w-full min-h-[400px] lg:min-h-[500px] xl:min-h-[600px]">
+                  {/* Glass effect container */}
+                  <div className="glass absolute inset-0 rounded-3xl overflow-hidden">
+                    <Image
+                      src="/hero-dental.jpg"
+                      alt="Professional dental care - Patient receiving quality dental treatment"
+                      fill
+                      className="object-cover"
+                      priority
+                      sizes="(max-width: 1024px) 0vw, 50vw"
+                    />
+                  </div>
+                  
+                  {/* Decorative elements */}
+                  <div className="absolute -inset-4 bg-linear-to-br from-primary/20 to-accent/20 rounded-3xl blur-2xl -z-10 opacity-50" />
+                </div>
               </div>
             </div>
 
             <button
               onClick={() => scrollToSection(1)}
-              className="mt-auto mb-8 flex flex-col items-center gap-2 transition-transform duration-1000 delay-500 hover:scale-105 animate-in fade-in"
+              className="mt-auto mb-8 flex flex-col items-center gap-2 transition-transform duration-1000 delay-500 hover:scale-105 animate-in fade-in lg:self-start"
             >
               <p className="text-[13px] font-medium text-white/90">Scroll to explore</p>
               <div className="animate-bounce">

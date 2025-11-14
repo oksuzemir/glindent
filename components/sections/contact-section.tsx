@@ -114,7 +114,7 @@ export function ContactSection() {
 
               {/* Social Links */}
               <div
-                className={`flex flex-wrap gap-4 pt-6 md:pt-8 transition-all duration-700 ${
+                className={`flex flex-wrap md:flex-nowrap md:justify-between items-center w-full pt-10 md:pt-20 gap-4 transition-all duration-700 ${
                   isVisible ? "translate-x-0 opacity-100" : "-translate-x-8 opacity-0"
                 }`}
                 style={{ transitionDelay: "400ms" }}
@@ -123,7 +123,7 @@ export function ContactSection() {
                   <a
                     key={social}
                     href="#"
-                    className="group relative font-mono text-xs text-foreground/60 uppercase tracking-wider transition-all hover:text-foreground"
+                    className="group relative md:flex-1 text-center font-mono text-xs text-foreground/60 uppercase tracking-wider transition-all hover:text-foreground"
                   >
                     {social}
                     <span className="absolute -bottom-1 left-0 h-px w-0 bg-foreground transition-all duration-300 group-hover:w-full" />

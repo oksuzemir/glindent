@@ -398,6 +398,115 @@ c:\Users\USER\Desktop\code/
 
 All sections use the `useReveal` hook for scroll animations:
 
+---
+
+## 🧾 Detailed Assistant (Copilot) Change Log
+
+**Note:** This section records the work performed by the assistant during the current session, including changes applied, files read, experimental edits, and any edits the user later reverted. Each entry lists the file(s), a concise description of the change, and the status (Applied / Reverted / Reviewed). Use this as the authoritative activity log for handoff and verification.
+
+### Summary of Actions (chronological)
+- Read and analyzed repository docs and key files: `copilot-instructions.md`, `README.md`, `ASSETS_CHECKLIST.md`, `PERFORMANCE_OPTIMIZATION.md`, `package.json` (status: Reviewed).
+- Performed a repo-wide audit for UX issues: hard-coded hex colors, inline styles, raw `<img>` tags, missing `alt` text, animation inconsistencies (status: Completed - report included in PR notes).
+- Centralized theme and animation tokens in `app/globals.css` (status: Applied then partially reverted by user — see Reverted list).
+- Tuned header styles (transparent background with subtle bottom border) across `app/page.tsx` and product pages (status: Applied then reverted in some files per user's undo notes).
+- Iteratively adjusted decorative particle system in `components/tooth-particles.tsx` to reduce intensity and improve subtlety (multiple iterations; final tuned opacity increased slightly) (status: Applied then partially reverted by user — see Reverted list).
+- Converted some raw `<img>` tags to Next.js `Image` for optimization (notably in `components/sections/services-section.tsx`) (status: Applied).
+- Adjusted layout/alignment in `components/sections/contact-section.tsx` (social link spacing and later relocation attempts) and prepared to center social links under the submit button (status: Edited; user later reverted some edits — see Reverted list).
+- Attempted sticky/scroll behavior for product modal image in `components/product-detail-modal.tsx` (added refs and scroll handling) — user later reverted these modal edits (status: Attempted, Reverted by user).
+- Added and tuned global animation tokens and reduced-motion handling in `app/globals.css` (status: Applied then reverted by user — see Reverted list).
+- Improved the `useReveal` hook (`hooks/use-reveal.ts`) to respect `prefers-reduced-motion` and disconnect observer after reveal (status: Applied then reverted by user — see Reverted list).
+- Replaced textual social links with icons (Lucide) in `contact-section.tsx` and added micro-animation classes (`.anim-fast`) (status: Applied then user reverted `contact-section.tsx` later — see Reverted list).
+- Tuned framer-motion spring parameters in `app/page.tsx` for a gentler feel and added `.anim-fast`/`.anim-slow` usage on hero/nav elements (status: Applied then partially reverted by user — see Reverted list).
+- Fixed an invalid SVG attribute (`textTransform`) in `components/glindent-logo.tsx` that caused a React console warning and hydration mismatch (status: Applied — still present in the repo).
+- Performed a repo scan for invalid DOM/SVG props and minor cleanups (status: Completed — no other invalid props found).
+
+### Files Modified (detailed)
+- `app/globals.css`
+  - What: Added CSS variables for animation tokens (`--anim-fast`, `--anim`, `--anim-slow`, `--anim-ease`) and helper classes `.anim-fast`, `.anim-slow`. Added normalization rules for `.animate-in`, `.fade-in` etc. Added prefers-reduced-motion overrides.
+  - Why: Centralize animation timing/easing and respect reduced-motion accessibility.
+  - Status: Applied during session; user later reverted this file to a prior state (verify local change history).
+
+- `components/glindent-logo.tsx`
+  - What: Removed invalid `textTransform` attribute from the SVG `<text>` element (the text content is already uppercase)
+  - Why: Prevent React console warning and hydration mismatch caused by an invalid DOM/SVG prop.
+  - Status: Applied (kept).
+
+- `components/tooth-particles.tsx`
+  - What: Reworked particle DOM updates to use GPU-accelerated transforms (`translate3d`) and stored element references to avoid `querySelector` on each frame; improved cleanup. Adjusted particle defaults (count, speed, size, opacity) during iterative tuning.
+  - Why: Improve animation smoothness and performance while keeping the decorative effect subtle.
+  - Status: Changes were applied, later the file was reported as reverted by the user — check git history if you want to reapply.
+
+- `components/sections/services-section.tsx`
+  - What: Replaced raw `<img>` usage with `next/image` for optimization (width/height added) where appropriate.
+  - Why: Improve performance and layout stability (Next Image optimizations).
+  - Status: Applied.
+
+- `components/sections/contact-section.tsx`
+  - What: Multiple edits: spacing adjustments for social links, later removed the left-column social block in preparation to reinsert centered under the submit button; later attempts added refs to vertically align the social block to the submit button and to set right-column min-height to match left column; also experimented with swapping text links for Lucide icons with `.anim-fast` classes.
+  - Why: Align social links precisely with the submit button, improve accessibility and micro-animations.
+  - Status: Several edits were applied during the session but the user later reverted changes to this file — verify file content before reapplying new patches.
+
+- `components/product-detail-modal.tsx`
+  - What: Prototype sticky/scroll behavior for the product image using refs and scroll listeners.
+  - Why: Provide a sticky image that starts at the top and scrolls into the modal content for a polished UX.
+  - Status: Attempted; user reverted changes to this file.
+
+- `app/page.tsx`
+  - What: Tuned framer-motion spring parameters (main spring stiffness/damping and gradient spring), added `.anim-fast` on nav and `.anim-slow` on hero elements to use the centralized tokens.
+  - Why: Soften motion for a gentler feel and harmonize timing across hero elements.
+  - Status: Applied during session; user later reverted some edits — please verify current file content.
+
+- `hooks/use-reveal.ts`
+  - What: Improved the hook to respect `prefers-reduced-motion` and disconnect the IntersectionObserver once the element becomes visible (reduces callbacks).
+  - Why: Accessibility and performance improvement.
+  - Status: Applied during session; user later reverted this file.
+
+- `components/glindent-logo.tsx` (again)
+  - What: Fix applied to remove invalid attribute producing React warning/hydration mismatch.
+  - Status: Applied and retained.
+
+### Reverted Changes (explicit by user)
+The user explicitly undid edits to the following files after initial changes were applied. These are listed so you can confirm desired final state and decide whether to reapply or leave reverted:
+- `components/sections/contact-section.tsx` (user reverted some of the contact-section edits)
+- `components/product-detail-modal.tsx` (user reverted modal sticky-image edits)
+- `app/globals.css` (user reverted animation tokens / globals changes)
+- `app/page.tsx` (user reverted some animation/hero edits)
+- `components/tooth-particles.tsx` (user reverted particle implementation changes)
+- `hooks/use-reveal.ts` (user reverted hook enhancements)
+
+If you want any of the above re-applied, tell me which files to reapply and I will re-run the patches (I will present a short confirmation before overwriting).
+
+### Why some changes were made then reverted
+- The assistant iteratively applied UI-polish changes per user guidance (centralize tokens, soften gradients, adjust particles, align contact social links). The user later undid some edits (sometimes to return to a previous working state). This log records both the edits the assistant made and which ones the user reverted so we have a clear audit trail.
+
+### Verification & Recommended Local Checks
+1. Run the dev server and check for console warnings and hydration mismatches:
+
+```bash
+pnpm dev
+# or
+npm run dev
+```
+
+2. Verify the following pages/areas visually:
+- Homepage (`/`) — hero animations, parallax gradient, nav reveal timing.
+- Contact section — contact boxes, social links placement, submit button alignment.
+- Product modal — (if restored) sticky image behavior and scroll interactions.
+- Particle effects — overall density and smoothness.
+
+3. Accessibility checks:
+- Toggle OS `prefers-reduced-motion` and verify `use-reveal` behavior (if you reapply hook change).
+
+### Next Actions (recommended)
+- Decide which reverted edits you want to keep and I will reapply them in a controlled batch with tests.
+- Optionally accept a targeted sweep to replace inline `transitionDelay` and `duration-*` Tailwind classes with `.anim-fast` / `.anim-slow` using an automated patch (I will show changes first).
+- If you want, I can reintroduce the `use-reveal` improvement and the `app/globals.css` animation tokens as a separate PR so you can review and accept them independently.
+
+---
+
+If you'd like I can now: reapply any of the reverted edits, create a small PR branch with the animation-token changes only (so you can review separately), or run an automated sweep replacing scattered `duration-*` classes with the new tokens. Tell me which you'd prefer and I'll proceed. 
+
+
 #### `AboutSection`
 - Company narrative (Gülsa → Glindent)
 - Animated statistics with creative layout

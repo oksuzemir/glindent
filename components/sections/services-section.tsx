@@ -2,6 +2,7 @@
 
 import { useReveal } from "@/hooks/use-reveal"
 import { useState } from "react"
+import Image from "next/image"
 
 export function ServicesSection() {
   const { ref, isVisible } = useReveal(0.3)
@@ -77,7 +78,7 @@ export function ServicesSection() {
             >
               ✕
             </button>
-            <img
+            <Image
               src={
                 [
                   "/placeholder.svg?height=400&width=600&query=dental zirconia discs white ceramic material",
@@ -87,6 +88,8 @@ export function ServicesSection() {
                 ][selectedProduct] || "/placeholder.svg"
               }
               alt="Product"
+              width={1200}
+              height={640}
               className="mb-6 h-64 w-full rounded-xl object-cover"
             />
             <h3 className="mb-4 font-sans text-3xl font-light text-foreground">
@@ -155,9 +158,11 @@ function ProductCard({
       }}
     >
       <div className="relative mb-4 overflow-hidden rounded-xl">
-        <img
+        <Image
           src={product.image || "/placeholder.svg"}
           alt={product.title}
+          width={800}
+          height={320}
           className="h-48 w-full object-cover transition-opacity duration-500 group-hover:opacity-75"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

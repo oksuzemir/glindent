@@ -5,12 +5,21 @@
 
 :root {
   --background: #007A72;
+  /* Primary brand colors split into tokens for reuse */
+  --primary-start: #007A72;
+  --primary-end: #3ACCFF;
+  /* Page background gradient tokens (lighter start to match previous look) */
+  --bg-gradient-start: #00A89A;
+  --bg-gradient-end: var(--primary-end);
+  /* Subtle header glassmorphism tokens (very transparent) */
+  --header-glass-bg: rgba(255,255,255,0.04);
+  --header-border: rgba(255,255,255,0.06);
   --foreground: oklch(0.98 0 0);
   --card: oklch(0.15 0 0);
   --card-foreground: oklch(0.98 0 0);
   --popover: oklch(0.15 0 0);
   --popover-foreground: oklch(0.98 0 0);
-  --primary: linear-gradient(135deg, #007A72 0%, #3ACCFF 100%);
+  --primary: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
   --primary-foreground: oklch(0.98 0 0);
   --secondary: oklch(0.25 0 0);
   --secondary-foreground: oklch(0.98 0 0);
@@ -22,8 +31,8 @@
   --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(0.25 0 0);
   --input: oklch(0.25 0 0);
-  --ring: linear-gradient(135deg, #007A72 0%, #3ACCFF 100%);
-  --chart-1: linear-gradient(135deg, #007A72 0%, #3ACCFF 100%);
+  --ring: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
+  --chart-1: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
   --chart-2: oklch(0.68 0.18 45);
   --chart-3: oklch(0.6 0.15 280);
   --chart-4: oklch(0.7 0.2 30);
@@ -78,6 +87,8 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+  --header-glass-bg: rgba(0,0,0,0.06);
+  --header-border: rgba(255,255,255,0.04);
 }
 
 @theme inline {

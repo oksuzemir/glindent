@@ -88,14 +88,22 @@ export default function ProductDetailPage() {
     <div className="relative min-h-screen bg-background">
       <GrainOverlay />
 
-      <header className="fixed left-0 right-0 top-0 z-40 border-b border-foreground/10 bg-background/80 backdrop-blur-md">
+      <header
+        className="fixed left-0 right-0 top-0 z-40"
+        style={{
+          background: 'transparent',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          borderBottom: '1px solid var(--header-border)'
+        }}
+      >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <button onClick={() => router.push("/")} className="transition-all hover:brightness-90">
+          <button onClick={() => router.push("/")} className="transition-all hover:brightness-90 p-2 rounded-md">
             <GlindentLogo variant="green" className="h-8 w-auto" />
           </button>
           <button
             onClick={() => router.push("/")}
-            className="flex items-center gap-2 text-foreground/60 transition-colors hover:text-foreground"
+            className="flex items-center gap-2 text-foreground/60 transition-colors hover:text-foreground px-2 py-1 rounded-md"
           >
             <span>←</span>
             <span>Back to Products</span>
