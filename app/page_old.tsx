@@ -11,43 +11,44 @@ import Link from "next/link"
 import { FAQSection } from "@/components/sections/faq-section"
 import { GlindentLogo } from "@/components/glindent-logo"
 import { ChevronDown } from "lucide-react"
-import { motion, useMotionValue, useSpring, animate } from "framer-motion"
 
 export default function Home() {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [currentSection, setCurrentSection] = useState(0)
-  const [isLoaded, setIsLoaded] = useState(false)
-  
-  // Framer Motion values for smooth animations
-  const x = useMotionValue(0)
-  const springX = useSpring(x, { 
-    stiffness: 300, 
-    damping: 30,
-    mass: 0.8 
-  })
-  
-  // Parallax gradient that follows scroll position
-  const gradientX = useMotionValue(0)
-  const springGradientX = useSpring(gradientX, { stiffness: 80, damping: 20 })
-  
-  const isAnimating = useRef(false)
-  const touchStartX = useRef(0)
-  const touchStartY = useRef(0)
+  const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
-    setIsLoaded(true)
+    const checkShaderReady = () => {
+      if (shaderContainerRef.current) {
+        const canvas = shaderContainerRef.current.querySelector("canvas")
+        if (canvas && canvas.width > 0 && canvas.height > 0) {
+          setIsLoaded(true)
+          return true
+        }
+      }
+      return false
+    }
+
+    if (checkShaderReady()) return
+
+    const intervalId = setInterval(() => {
+      if (checkShaderReady()) {
+        clearInterval(intervalId)
+      }
+    }, 100)
+
+    const fallbackTimer = setTimeout(() => {
+      setIsLoaded(true)
+      // If shader hasn't loaded after 2 seconds, show fallback
+      if (!checkShaderReady()) {
+        setShaderError(true)
+      }
+    }, 2000)
+
+    return () => {
+      clearInterval(intervalId)
+      clearTimeout(fallbackTimer)
+    }
   }, [])
-
-  // Update gradient position based on horizontal scroll
-  useEffect(() => {
-    const unsubscribe = x.on('change', (latest) => {
-      // Move gradient opposite to scroll direction for parallax effect
-      // Scale factor: 10% movement relative to scroll (reduced for better coverage)
-      gradientX.set(latest * 0.1)
-    })
-
-    return () => unsubscribe()
-  }, [x, gradientX])
 
   const scrollToSection = (index: number) => {
     if (index < 0 || index > 4 || isAnimating.current) return
@@ -186,17 +187,48 @@ export default function Home() {
       <CustomCursor />
       <GrainOverlay />
 
-      {/* Static Gradient Background */}
-      <motion.div
-        className="fixed inset-0 z-0"
-        style={{
-          x: springGradientX,
-          background: 'linear-gradient(315deg, #00A89A 0%, #3ACCFF 100%)',
-          width: '300%',
-          left: '-100%'
-        }}
-      />
-      <div className="fixed inset-0 z-0 bg-black/20" />
+      {/* Fallback gradient background */}
+      <div className="fixed inset-0 z-0 bg-linear-to-br from-[#007A72] via-[#3ACCFF] to-background" />
+
+      {/* WebGL Shader Background (enhanced version) */}
+      {!shaderError && (
+        <div
+          ref={shaderContainerRef}
+          className={`fixed inset-0 z-0 transition-opacity duration-700 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+          style={{ contain: "strict" }}
+        >
+          <Suspense fallback={null}>
+            <Shader className="h-full w-full">
+              <Swirl
+                colorA="#007A72"
+                colorB="#3ACCFF"
+                speed={0.8}
+                detail={0.8}
+                blend={50}
+                coarseX={40}
+                coarseY={40}
+                mediumX={40}
+                mediumY={40}
+                fineX={40}
+                fineY={40}
+              />
+              <ChromaFlow
+                baseColor="#007A72"
+                upColor="#007A72"
+                downColor="#d1d1d1"
+                leftColor="#3ACCFF"
+                rightColor="#3ACCFF"
+                intensity={0.9}
+                radius={1.8}
+                momentum={25}
+                maskType="alpha"
+                opacity={0.97}
+              />
+            </Shader>
+          </Suspense>
+          <div className="absolute inset-0 bg-black/20" />
+        </div>
+      )}
 
       <nav
         className={`fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-6 transition-opacity duration-700 md:px-12 ${
@@ -252,6 +284,13 @@ export default function Home() {
         <section 
           className="relative flex min-h-screen w-screen shrink-0 flex-col px-6 pt-32 pb-8 md:px-12 md:pt-40 md:pb-12 lg:px-16"
         >
+          <div
+            className="absolute inset-0 z-0"
+            style={{
+              background: `radial-gradient(70% 60% at 20% 30%, rgba(0,0,0,.16) 0%, rgba(0,0,0,.08) 35%, transparent 70%), linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.04))`,
+            }}
+          />
+
           <div className="relative z-10 flex h-full flex-col justify-start">
             <div className="max-w-3xl pt-4 md:pt-8">
               <div className="glass mb-6 inline-block animate-in fade-in slide-in-from-bottom-4 rounded-2xl px-4 py-1.5 duration-700">

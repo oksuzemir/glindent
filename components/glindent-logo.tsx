@@ -2,8 +2,8 @@ export function GlindentLogo({
   className = "",
   variant = "white",
 }: { className?: string; variant?: "white" | "green" }) {
-  const textColor = variant === "white" ? "#ffffff" : "#3db8a4"
-  const taglineColor = variant === "white" ? "rgba(255,255,255,0.7)" : "#2c8e8a"
+  const textColor = variant === "white" ? "#ffffff" : "#007A72"
+  const taglineColor = variant === "white" ? "rgba(255,255,255,0.7)" : "#3ACCFF"
 
   return (
     <svg

@@ -4,13 +4,13 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.12 0 0);
+  --background: #007A72;
   --foreground: oklch(0.98 0 0);
   --card: oklch(0.15 0 0);
   --card-foreground: oklch(0.98 0 0);
   --popover: oklch(0.15 0 0);
   --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.65 0.22 250);
+  --primary: linear-gradient(135deg, #007A72 0%, #3ACCFF 100%);
   --primary-foreground: oklch(0.98 0 0);
   --secondary: oklch(0.25 0 0);
   --secondary-foreground: oklch(0.98 0 0);
@@ -22,8 +22,8 @@
   --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(0.25 0 0);
   --input: oklch(0.25 0 0);
-  --ring: oklch(0.65 0.22 250);
-  --chart-1: oklch(0.65 0.22 250);
+  --ring: linear-gradient(135deg, #007A72 0%, #3ACCFF 100%);
+  --chart-1: linear-gradient(135deg, #007A72 0%, #3ACCFF 100%);
   --chart-2: oklch(0.68 0.18 45);
   --chart-3: oklch(0.6 0.15 280);
   --chart-4: oklch(0.7 0.2 30);
@@ -46,13 +46,13 @@
 }
 
 .dark {
-  --background: oklch(0.12 0 0);
+  --background: #007A72;
   --foreground: oklch(0.98 0 0);
   --card: oklch(0.15 0 0);
   --card-foreground: oklch(0.98 0 0);
   --popover: oklch(0.15 0 0);
   --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.65 0.22 250);
+  --primary: linear-gradient(135deg, #007A72 0%, #3ACCFF 100%);
   --primary-foreground: oklch(0.98 0 0);
   --secondary: oklch(0.25 0 0);
   --secondary-foreground: oklch(0.98 0 0);
@@ -64,8 +64,8 @@
   --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(0.25 0 0);
   --input: oklch(0.25 0 0);
-  --ring: oklch(0.65 0.22 250);
-  --chart-1: oklch(0.65 0.22 250);
+  --ring: linear-gradient(135deg, #007A72 0%, #3ACCFF 100%);
+  --chart-1: linear-gradient(135deg, #007A72 0%, #3ACCFF 100%);
   --chart-2: oklch(0.68 0.18 45);
   --chart-3: oklch(0.6 0.15 280);
   --chart-4: oklch(0.7 0.2 30);

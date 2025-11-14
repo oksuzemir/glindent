@@ -4,8 +4,8 @@
   "description": "UK supplier of premium dental supplies including zirconia discs, X-ray films, composites, and CAD/CAM materials",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1e1e1e",
-  "theme_color": "#3db8a4",
+  "background_color": "#007A72",
+  "theme_color": "#007A72",
   "orientation": "portrait-primary",
   "icons": [
     {

@@ -2,8 +2,9 @@
 
 import type { Product } from "@/lib/products"
 import { MagneticButton } from "@/components/magnetic-button"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
+import { createPortal } from "react-dom"
 
 interface ProductDetailModalProps {
   product: Product | null
@@ -13,12 +14,17 @@ interface ProductDetailModalProps {
 
 export function ProductDetailModal({ product, isOpen, onClose }: ProductDetailModalProps) {
   const [selectedColor, setSelectedColor] = useState(0)
+  const [mounted, setMounted] = useState(false)
 
-  if (!isOpen || !product) return null
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-  return (
+  if (!isOpen || !product || !mounted) return null
+
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
@@ -35,14 +41,14 @@ export function ProductDetailModal({ product, isOpen, onClose }: ProductDetailMo
 
         <div className="grid gap-8 p-8 lg:grid-cols-2">
           {/* Product Image */}
-          <div className="relative overflow-hidden rounded-2xl border border-foreground/10 bg-foreground/5">
-            <div className="aspect-square relative">
+          <div className="relative overflow-hidden rounded-2xl border border-foreground/10 bg-linear-to-br from-foreground/10 via-foreground/5 to-background">
+            <div className="aspect-square relative flex items-center justify-center p-8">
               <Image
                 src={product.image || "/placeholder.svg"}
                 alt={`${product.name} - ${product.description}`}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover"
+                className="object-contain drop-shadow-2xl"
               />
             </div>
           </div>
@@ -135,6 +141,7 @@ export function ProductDetailModal({ product, isOpen, onClose }: ProductDetailMo
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

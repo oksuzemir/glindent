@@ -39,7 +39,7 @@ export function ProductsSection() {
                 <button
                   key={product.id}
                   onClick={() => handleProductClick(product)}
-                  className={`group relative block overflow-hidden rounded-xl border border-foreground/10 bg-foreground/5 backdrop-blur-sm transition-all duration-700 hover:scale-[1.02] hover:border-foreground/20 hover:bg-foreground/10 ${
+                  className={`group relative block overflow-hidden rounded-xl border border-foreground/10 bg-foreground/5 backdrop-blur-sm transition-all duration-700 hover:border-foreground/20 hover:bg-foreground/10 ${
                     isRevealed ? "translate-y-0 opacity-100 blur-0" : "translate-y-12 opacity-0 blur-md"
                   }`}
                   style={{
@@ -52,7 +52,7 @@ export function ProductsSection() {
                       alt={`${product.name} - ${product.description}`}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 20vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="object-cover transition-opacity duration-500 group-hover:opacity-80"
                     />
                   </div>
                   <div className="p-4 text-left">
@@ -64,7 +64,7 @@ export function ProductsSection() {
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-lg font-semibold text-foreground">{product.price}</span>
-                      <span className="text-xs text-foreground/60 transition-all group-hover:translate-x-1">
+                      <span className="text-xs text-foreground/60 transition-all group-hover:text-foreground/90">
                         View →
                       </span>
                     </div>

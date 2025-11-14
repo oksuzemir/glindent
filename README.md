@@ -89,9 +89,9 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## 🎨 Design System
 
 ### Colors
-- **Primary**: Teal (#3db8a4)
-- **Secondary**: Dark Teal (#2c8e8a)
-- **Background**: Dark (#1e1e1e)
+- **Primary**: Teal (#007A72)
+- **Secondary**: Cyan (#3ACCFF)
+- **Background**: Teal (#007A72)
 - **Foreground**: Off-white (#fafafa)
 
 ### Typography

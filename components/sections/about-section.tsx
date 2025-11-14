@@ -129,10 +129,10 @@ export function AboutSection({ scrollToSection }: { scrollToSection?: (index: nu
                     maxWidth: i % 2 === 0 ? "100%" : "85%",
                   }}
                 >
-                  <div className="text-4xl font-light text-foreground transition-all duration-500 group-hover:scale-110 group-hover:text-foreground/80 md:text-5xl lg:text-6xl xl:text-7xl">
-                    {stat.value}
+                  <div className="text-4xl font-light text-foreground transition-all duration-500 group-hover:text-primary md:text-5xl lg:text-6xl xl:text-7xl">
+                    {stat.number}
                   </div>
-                  <div className="transition-all duration-500 group-hover:translate-x-1">
+                  <div className="transition-all duration-500 group-hover:brightness-90">
                     <div className="font-sans text-base font-light text-foreground transition-colors duration-500 group-hover:text-foreground/80 md:text-xl">
                       {stat.label}
                     </div>

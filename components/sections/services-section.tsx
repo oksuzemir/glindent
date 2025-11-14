@@ -103,7 +103,7 @@ export function ServicesSection() {
               }
             </p>
             <div className="flex gap-4">
-              <button className="rounded-lg bg-foreground px-6 py-3 font-medium text-background transition-transform hover:scale-105">
+              <button className="rounded-lg bg-foreground px-6 py-3 font-medium text-background transition-all hover:brightness-90">
                 Add to Cart
               </button>
               <button className="rounded-lg border border-foreground/20 px-6 py-3 font-medium text-foreground transition-colors hover:bg-foreground/10">
@@ -158,7 +158,7 @@ function ProductCard({
         <img
           src={product.image || "/placeholder.svg"}
           alt={product.title}
-          className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className="h-48 w-full object-cover transition-opacity duration-500 group-hover:opacity-75"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
