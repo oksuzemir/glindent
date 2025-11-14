@@ -3,29 +3,20 @@
 import { useEffect, useRef } from "react"
 
 export function CustomCursor() {
-  const outerRef = useRef<HTMLDivElement>(null)
-  const innerRef = useRef<HTMLDivElement>(null)
+  const cursorRef = useRef<HTMLDivElement>(null)
   const positionRef = useRef({ x: 0, y: 0 })
   const targetPositionRef = useRef({ x: 0, y: 0 })
-  const isPointerRef = useRef(false)
 
   useEffect(() => {
     let animationFrameId: number
 
-    const lerp = (start: number, end: number, factor: number) => {
-      return start + (end - start) * factor
-    }
-
     const updateCursor = () => {
-      positionRef.current.x = lerp(positionRef.current.x, targetPositionRef.current.x, 0.15)
-      positionRef.current.y = lerp(positionRef.current.y, targetPositionRef.current.y, 0.15)
+      // Increased lerp factor from 0.25 to 0.4 for even faster tracking
+      positionRef.current.x += (targetPositionRef.current.x - positionRef.current.x) * 0.4
+      positionRef.current.y += (targetPositionRef.current.y - positionRef.current.y) * 0.4
 
-      if (outerRef.current && innerRef.current) {
-        const scale = isPointerRef.current ? 1.5 : 1
-        const innerScale = isPointerRef.current ? 0.5 : 1
-
-        outerRef.current.style.transform = `translate3d(${positionRef.current.x}px, ${positionRef.current.y}px, 0) translate(-50%, -50%) scale(${scale})`
-        innerRef.current.style.transform = `translate3d(${positionRef.current.x}px, ${positionRef.current.y}px, 0) translate(-50%, -50%) scale(${innerScale})`
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${positionRef.current.x}px, ${positionRef.current.y}px, 0)`
       }
 
       animationFrameId = requestAnimationFrame(updateCursor)
@@ -33,10 +24,6 @@ export function CustomCursor() {
 
     const handleMouseMove = (e: MouseEvent) => {
       targetPositionRef.current = { x: e.clientX, y: e.clientY }
-
-      const target = e.target as HTMLElement
-      isPointerRef.current =
-        window.getComputedStyle(target).cursor === "pointer" || target.tagName === "BUTTON" || target.tagName === "A"
     }
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true })
@@ -49,21 +36,12 @@ export function CustomCursor() {
   }, [])
 
   return (
-    <>
-      <div
-        ref={outerRef}
-        className="pointer-events-none fixed left-0 top-0 z-99999 mix-blend-difference will-change-transform"
-        style={{ contain: "layout style paint" }}
-      >
-        <div className="h-4 w-4 rounded-full border-2 border-white" />
-      </div>
-      <div
-        ref={innerRef}
-        className="pointer-events-none fixed left-0 top-0 z-99999 mix-blend-difference will-change-transform"
-        style={{ contain: "layout style paint" }}
-      >
-        <div className="h-2 w-2 rounded-full bg-white" />
-      </div>
-    </>
+    <div
+      ref={cursorRef}
+      className="pointer-events-none fixed left-0 top-0 z-99999 -ml-2 -mt-2 will-change-transform"
+      style={{ contain: "layout style paint" }}
+    >
+      <div className="h-4 w-4 rounded-full border border-white/80 bg-white/20" />
+    </div>
   )
 }

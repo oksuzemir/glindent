@@ -2,6 +2,7 @@
 
 import { CustomCursor } from "@/components/custom-cursor"
 import { GrainOverlay } from "@/components/grain-overlay"
+import { ToothParticles } from "@/components/tooth-particles"
 import { AboutSection } from "@/components/sections/about-section"
 import { ProductsSection } from "@/components/sections/products-section"
 import { ContactSection } from "@/components/sections/contact-section"
@@ -42,8 +43,8 @@ export default function Home() {
   useEffect(() => {
     const unsubscribe = x.on('change', (latest) => {
       // Move gradient opposite to scroll direction for parallax effect
-      // Scale factor: 10% movement relative to scroll (reduced for better coverage)
-      gradientX.set(latest * 0.1)
+      // Increased scale factor from 0.1 to 0.25 for faster color changes
+      gradientX.set(latest * 0.25)
     })
 
     return () => unsubscribe()
@@ -185,6 +186,7 @@ export default function Home() {
     <main className="relative h-screen w-full overflow-hidden bg-background">
       <CustomCursor />
       <GrainOverlay />
+      <ToothParticles currentSection={currentSection} />
 
       {/* Static Gradient Background */}
       <motion.div
